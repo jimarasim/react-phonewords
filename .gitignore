@@ -21,3 +21,13 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+.eslintcache
+.idea/inspectionProfiles/
+.idea/vcs.xml
+public/favicon.ico
+public/logo192.png
+public/logo512.png
+src/NumberInput.js
+src/PhoneWordsFrame.js
+src/SelectionDisplay.js

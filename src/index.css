@@ -11,3 +11,15 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+div.main {
+  border-style: solid;
+  position: absolute;
+  top: 25%;
+  left: 25%;
+}
+
+input {
+  background-color: aquamarine;
+  width: 50px;
+}
