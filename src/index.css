@@ -15,11 +15,11 @@ code {
 div.main {
   border-style: solid;
   position: absolute;
-  top: 25%;
-  left: 25%;
+  top: 10%;
+  left: 10%;
 }
 
 input {
   background-color: aquamarine;
-  width: 50px;
+  width: 75px;
 }
