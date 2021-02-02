@@ -10,9 +10,9 @@ class PhoneWordsFrame extends React.Component {
         super(props);
         this.state = {
             phoneNumber: Array(10).fill(""),
-            areaCodeWords: [],
-            prefixWords: [],
-            suffixWords: [],
+            areaCodeWords: Array(Array(2)),
+            prefixWords: Array(Array(2)),
+            suffixWords: Array(Array(2)),
         };
     }
 
@@ -54,8 +54,7 @@ class PhoneWordsFrame extends React.Component {
             <div className='main'>
                 <NumberInput id='phonenumber' length='10' action={(element) => this.handleKeyUp(element)}/>
                 <SelectionDisplay displayText={formattedPhoneWordString}/>
-                <CombinationsList areaCodeWords={this.state.areaCodeWords} prefixWords={this.state.prefixWords}
-                                  suffixWords={this.state.suffixWords}/>
+                <CombinationsList area={this.state.areaCodeWords} prefix={this.state.prefixWords} suffix={this.state.suffixWords}/>
             </div>
         );
     }
@@ -71,9 +70,9 @@ class PhoneWordsFrame extends React.Component {
                 newPhoneNumber[i] = element.target.value[i];
             }
         }
-        let newAreaCodeWords = Array(0);
-        let newPrefixWords = Array(0);
-        let newSuffixWords = Array(0);
+        let newAreaCodeWords = Array(Array(2));
+        let newPrefixWords = Array(Array(2));
+        let newSuffixWords = Array(Array(2));
         if (element.target.value.length === 10) {
             [newAreaCodeWords, newPrefixWords, newSuffixWords] = this.getWordCombinations(newPhoneNumber);
         }
@@ -86,21 +85,21 @@ class PhoneWordsFrame extends React.Component {
     }
 
     getWordCombinations(phoneNumberCombinationData) {
-        let newAreaCodeWords = Array(0);
-        let newPrefixWords = Array(0);
-        let newSuffixWords = Array(0);
+        let newAreaCodeWords = Array(Array(2));
+        let newPrefixWords = Array(Array(2));
+        let newSuffixWords = Array(Array(2));
         //AREA
         for (let i = 0; i < phoneNumberCombinationData[0].length; i++) {
             for (let j = 0; j < phoneNumberCombinationData[1].length; j++) {
                 for (let k = 0; k < phoneNumberCombinationData[2].length; k++) {
-                    newAreaCodeWords.push(phoneNumberCombinationData[0][i] + phoneNumberCombinationData[1][j] + phoneNumberCombinationData[2][k]);
+                    newAreaCodeWords.push([phoneNumberCombinationData[0][i] + phoneNumberCombinationData[1][j] + phoneNumberCombinationData[2][k], ""]);
                 }
             }
         }
         for (let i = 0; i < phoneNumberCombinationData[3].length; i++) {
             for (let j = 0; j < phoneNumberCombinationData[4].length; j++) {
                 for (let k = 0; k < phoneNumberCombinationData[5].length; k++) {
-                    newPrefixWords.push(phoneNumberCombinationData[3][i] + phoneNumberCombinationData[4][j] + phoneNumberCombinationData[5][k]);
+                    newPrefixWords.push([phoneNumberCombinationData[3][i] + phoneNumberCombinationData[4][j] + phoneNumberCombinationData[5][k], ""]);
                 }
             }
         }
@@ -108,7 +107,7 @@ class PhoneWordsFrame extends React.Component {
             for (let j = 0; j < phoneNumberCombinationData[7].length; j++) {
                 for (let k = 0; k < phoneNumberCombinationData[8].length; k++) {
                     for (let l = 0; l < phoneNumberCombinationData[9].length; l++) {
-                        newSuffixWords.push(phoneNumberCombinationData[6][i] + phoneNumberCombinationData[7][j] + phoneNumberCombinationData[8][k] + phoneNumberCombinationData[9][l]);
+                        newSuffixWords.push([phoneNumberCombinationData[6][i] + phoneNumberCombinationData[7][j] + phoneNumberCombinationData[8][k] + phoneNumberCombinationData[9][l], ""]);
                     }
                 }
             }
