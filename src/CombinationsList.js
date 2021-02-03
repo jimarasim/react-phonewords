@@ -7,15 +7,47 @@ class CombinationsList extends React.Component {
         let prefixList = Array(0);
         let suffixList = Array(0);
         for(let i=0; i<this.props.area.length; i++){
-            areaCodeList.push(<option>{this.props.area[i][0]}</option>);
+            const areaid = "area" + i;
+            areaCodeList.push(<option key={areaid} id={areaid}>{this.props.area[i][0]}</option>);
+            this.fetchWord(areaid, this.props.area[i][0]);
         }
         for(let i=0; i<this.props.prefix.length; i++){
-            prefixList.push(<option>{this.props.prefix[i][0]}</option>);
+            const prefixid = "prefix" + i;
+            prefixList.push(<option key={prefixid} id={prefixid}>{this.props.prefix[i][0]}</option>);
+            this.fetchWord(prefixid, this.props.prefix[i][0]);
         }
         for(let i=0; i<this.props.suffix.length; i++){
-            suffixList.push(<option>{this.props.suffix[i][0]}</option>);
+            const suffixid = "suffix" + i;
+            suffixList.push(<option key={suffixid} id={suffixid}>{this.props.suffix[i][0]}</option>);
+            this.fetchWord(suffixid, this.props.suffix[i][0]);
         }
-        return (<p><select>{areaCodeList}</select><select>{prefixList}</select><select>{suffixList}</select></p>);
+        if(areaCodeList.length > 1)
+        {
+            return (<><select id='area'>{areaCodeList}</select><br /><select id='prefix'>{prefixList}</select><br /><select id='suffix'>{suffixList}</select></>)
+        }
+        else {
+            return(<></>);
+        }
+    }
+
+    fetchWord(optionId, word) {
+        if (word) {
+            word = word.replace("1", "i").replace("0", "o");
+            fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
+                .then(res => res.json())
+                .then(res => {
+                    //find the first non-undefined definition
+                    const numDefs = Object.keys(res).length;
+                    let i = 0;
+                    for(i=0; i<numDefs;i++){
+                        if(res[i].shortdef[0] !== undefined){
+                            break;
+                        }
+                    }
+                    document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                })
+                .catch(console.error);
+        }
     }
 }
 

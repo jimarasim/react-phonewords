@@ -52,6 +52,7 @@ class PhoneWordsFrame extends React.Component {
             "}";
         return (
             <div className='main'>
+                <span>Enter 10 digit Phone Number:</span><br />
                 <NumberInput id='phonenumber' length='10' action={(element) => this.handleKeyUp(element)}/>
                 <SelectionDisplay displayText={formattedPhoneWordString}/>
                 <CombinationsList area={this.state.areaCodeWords} prefix={this.state.prefixWords} suffix={this.state.suffixWords}/>
@@ -114,6 +115,8 @@ class PhoneWordsFrame extends React.Component {
         }
         return ([newAreaCodeWords, newPrefixWords, newSuffixWords]);
     }
+
+    
 }
 
 export default PhoneWordsFrame;
