@@ -33,18 +33,34 @@ class CombinationsList extends React.Component {
     fetchWord(optionId, word) {
         if (word) {
             word = word.replace("1", "i").replace("0", "o");
-            fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
+            // fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
+            //     .then(res => res.json())
+            //     .then(res => {
+            //         //find the first non-undefined definition
+            //         const numDefs = Object.keys(res).length;
+            //         let i = 0;
+            //         for(i=0; i<numDefs;i++){
+            //             if(res[i].shortdef[0] !== undefined){
+            //                 break;
+            //             }
+            //         }
+            //         document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+            //     })
+            //     .catch(console.error);
+            fetch('http://api.urbandictionary.com/v0/define?term=' + word)
                 .then(res => res.json())
                 .then(res => {
-                    //find the first non-undefined definition
-                    const numDefs = Object.keys(res).length;
-                    let i = 0;
-                    for(i=0; i<numDefs;i++){
-                        if(res[i].shortdef[0] !== undefined){
-                            break;
+                    //find most thumbs up definition
+                    const numDefs = Object.keys(res.list).length;
+                    let bestThumbsUp = 0;
+                    let bestIndex = 0;
+                    for(let i=0; i<numDefs; i++){
+                        if(res.list[i].thumbs_up > bestThumbsUp) {
+                            bestThumbsUp = res.list[i].thumbs_up;
+                            bestIndex = i;
                         }
                     }
-                    document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                    document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res.list[bestIndex].definition;
                 })
                 .catch(console.error);
         }
