@@ -19,7 +19,18 @@ div.main {
   left: 10%;
 }
 
+div.definitionList {
+  width:25%
+}
+
 input {
   background-color: aquamarine;
   width: 75px;
+}
+
+table {
+  width: 50%;
+}
+table, th, td {
+  border: 1px solid black;
 }
