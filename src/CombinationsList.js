@@ -66,7 +66,7 @@ class CombinationsList extends React.Component {
             //         document.getElementById(definitionListId).appendChild(li);
             //     })
             //     .catch(console.warn);
-            fetch('http://api.urbandictionary.com/v0/define?term=' + word)
+            fetch('http://api.urbandictionary.com/v0/define?term=' + word, {mode: 'cors'})
                 .then(res => res.json())
                 .then (res => {
                     //find most thumbs up definition

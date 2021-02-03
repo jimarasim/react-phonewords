@@ -28,12 +28,12 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 FOR DREAMHOST: PUT THIS IN TOP LEVEL OF package.json
-"homepage": "http://jaemzware.com/phonewords"
+"homepage": "http://seattlerules.com/phonewords"
 before running 
 npm run build
 then upload contents
 of build to that directory
-JAMESs-iMac:build jamesarasim$ scp -r * jimara0@seattlerules.com:/home/jimara0/jaemzware.com/phonewords
+JAMESs-iMac:build jamesarasim$ scp -r * jimara0@seattlerules.com:/home/jimara0/seattlerules.com/phonewords
 
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
