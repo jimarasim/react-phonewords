@@ -9,17 +9,17 @@ function CombinationsList({area, prefix, suffix}){
     for(let i=0; i<area.length; i++){
         const areaid = "area" + i;
         areaCodeList.push(<option key={areaid} id={areaid}>{area[i][0]}</option>);
-        fetchWord(areaid, area[i][0], "areaDefinitions");
+        fetchWordFromMerriam(areaid, area[i][0], "areaDefinitions");
     }
     for(let i=0; i<prefix.length; i++){
         const prefixid = "prefix" + i;
         prefixList.push(<option key={prefixid} id={prefixid}>{prefix[i][0]}</option>);
-        fetchWord(prefixid, prefix[i][0], "prefixDefinitions");
+        fetchWordFromMerriam(prefixid, prefix[i][0], "prefixDefinitions");
     }
     for(let i=0; i<suffix.length; i++){
         const suffixid = "suffix" + i;
         suffixList.push(<option key={suffixid} id={suffixid}>{suffix[i][0]}</option>);
-        fetchWord(suffixid, suffix[i][0], "suffixDefinitions");
+        fetchWordFromMerriam(suffixid, suffix[i][0], "suffixDefinitions");
     }
     if(areaCodeList.length > 1)
     {
@@ -46,50 +46,63 @@ function CombinationsList({area, prefix, suffix}){
 
 }
 
-function fetchWord(optionId, word, definitionListId) {
+function fetchWordFromMerriam(optionId, word, definitionListId) {
     if (word) {
         word = word.replace("1", "i").replace("0", "o");
+        //MERRIAM WEBSTER
         fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
             .then(res => res.json())
             .then(res => {
-                if(!res[0].hasOwnProperty('shortdef')) throw new Error("UNEXPECTED JSON:" + res);
+                if (!res[0].hasOwnProperty('shortdef')) throw new Error("NODEFINITION" + res);
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
                 let i = 0;
-                for(i=0; i<numDefs;i++){
-                    if(res[i].shortdef[0]){
+                for (i = 0; i < numDefs; i++) {
+                    if (res[i].shortdef[0]) {
                         break;
                     }
-                };
-                document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                }
+                const definition = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0] + " (MERRIAMWEBSTER)";
+                document.getElementById(optionId).innerText = definition;
                 let li = document.createElement("li");
-                li.innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                li.innerText = definition;
+                document.getElementById(definitionListId).appendChild(li);
+            })
+            .catch((message) => {
+                    console.warn(message);
+                    fetchWordFromUrban(optionId, word, definitionListId);
+                }
+            );
+    }
+}
+
+function fetchWordFromUrban(optionId, word, definitionListId) {
+    if(word){
+        //URBAN DICTIONARY
+        fetch('http://api.urbandictionary.com/v0/define?term=' + word, {mode: 'cors'})
+            .then(res => res.json())
+            .then (res => {
+                //find most thumbs up definition
+                const numDefs = Object.keys(res.list).length;
+                let bestThumbsUp = 0;
+                let bestIndex = 0;
+                for(let i=0; i<numDefs; i++){
+                    if(res.list[i].thumbs_up > bestThumbsUp) {
+                        bestThumbsUp = res.list[i].thumbs_up;
+                        bestIndex = i;
+                    }
+                }
+                let bestDefinition = res.list[bestIndex].definition;
+                const definition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
+                document.getElementById(optionId).innerText = definition;
+                let li = document.createElement("li");
+                li.innerText = definition;
                 document.getElementById(definitionListId).appendChild(li);
             })
             .catch(console.warn);
-        // fetch('http://api.urbandictionary.com/v0/define?term=' + word, {mode: 'cors'})
-        //     .then(res => res.json())
-        //     .then (res => {
-        //         //find most thumbs up definition
-        //         const numDefs = Object.keys(res.list).length;
-        //         let bestThumbsUp = 0;
-        //         let bestIndex = 0;
-        //         for(let i=0; i<numDefs; i++){
-        //             if(res.list[i].thumbs_up > bestThumbsUp) {
-        //                 bestThumbsUp = res.list[i].thumbs_up;
-        //                 bestIndex = i;
-        //             }
-        //         }
-        //         let bestDefinition = res.list[bestIndex].definition;
-        //         document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + bestDefinition;
-        //
-        //         let li = document.createElement("li");
-        //         li.innerText = document.getElementById(optionId).innerText + " - " + bestDefinition;
-        //         document.getElementById(definitionListId).appendChild(li);
-        //     })
-        //     .catch(console.warn);
     }
 }
+
 
 
 export default CombinationsList;
