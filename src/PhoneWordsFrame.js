@@ -20,7 +20,7 @@ function PhoneWordsFrame() {
                 {showCopyButtons ?
                     <>
                         <CopyButton id="parenFormatButton" buttonText={"(" + document.getElementById("area").options[document.getElementById("area").selectedIndex].value + ")" +
-                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + " - " +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
                         document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
                         <CopyButton id="dashFormatButton" buttonText={document.getElementById("area").options[document.getElementById("area").selectedIndex].value + "-" +
                         document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +

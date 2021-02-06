@@ -54,7 +54,7 @@ function setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons){
         document.getElementById("prefix").selectedIndex > 0 &&
         document.getElementById("suffix").selectedIndex > 0 && showCopyButtons) {
         document.getElementById("parenFormatButton").innerText = "(" + document.getElementById("area").options[document.getElementById("area").selectedIndex].value + ")" +
-            document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + " - " +
+            document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
             document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value;
         document.getElementById("dashFormatButton").innerText = document.getElementById("area").options[document.getElementById("area").selectedIndex].value + "-" +
             document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
