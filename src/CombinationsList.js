@@ -2,33 +2,36 @@ import './index.css';
 import * as React from "react";
 import DefinitionList from './DefinitionList';
 
-function CombinationsList({area, prefix, suffix}){
+function CombinationsList({area, prefix, suffix, showCopyButtons, setShowCopyButtons}){
     let areaCodeList = Array(0);
     let prefixList = Array(0);
     let suffixList = Array(0);
     for(let i=0; i<area.length; i++){
         const areaid = "area" + i;
-        areaCodeList.push(<option key={areaid} id={areaid}>{area[i][0]}</option>);
+        const areaOptionValue = area[i][0];
+        areaCodeList.push(<option key={areaid} id={areaid} value={areaOptionValue}>{areaOptionValue}</option>);
         fetchWordFromMerriam(areaid, area[i][0], "areaDefinitions");
     }
     for(let i=0; i<prefix.length; i++){
         const prefixid = "prefix" + i;
-        prefixList.push(<option key={prefixid} id={prefixid}>{prefix[i][0]}</option>);
+        const prefixOptionValue = prefix[i][0];
+        prefixList.push(<option key={prefixid} id={prefixid} value={prefixOptionValue}>{prefixOptionValue}</option>);
         fetchWordFromMerriam(prefixid, prefix[i][0], "prefixDefinitions");
     }
     for(let i=0; i<suffix.length; i++){
         const suffixid = "suffix" + i;
-        suffixList.push(<option key={suffixid} id={suffixid}>{suffix[i][0]}</option>);
+        const suffixOptionValue = suffix[i][0];
+        suffixList.push(<option key={suffixid} id={suffixid} value={suffixOptionValue}>{suffixOptionValue}</option>);
         fetchWordFromMerriam(suffixid, suffix[i][0], "suffixDefinitions");
     }
     if(areaCodeList.length > 1)
     {
         return (<>
-            <select id='area'><option value="" disabled selected hidden>Choose Area Code...</option>{areaCodeList}</select>
+            <select id='area' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Area Code...</option>{areaCodeList}</select>
             <br />
-            <select id='prefix'><option value="" disabled selected hidden>Choose Prefix...</option>{prefixList}</select>
+            <select id='prefix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Prefix...</option>{prefixList}</select>
             <br />
-            <select id='suffix'><option value="" disabled selected hidden>Choose Suffix...</option>{suffixList}</select>
+            <select id='suffix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Suffix...</option>{suffixList}</select>
             <hr />
             <h1><u>AREA</u></h1>
             <DefinitionList id="areaDefinitions" />
@@ -44,6 +47,28 @@ function CombinationsList({area, prefix, suffix}){
         return(<></>);
     }
 
+}
+
+function setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons){
+    if( document.getElementById("area").selectedIndex > 0 &&
+        document.getElementById("prefix").selectedIndex > 0 &&
+        document.getElementById("suffix").selectedIndex > 0 && showCopyButtons) {
+        document.getElementById("parenFormatButton").innerText = "(" + document.getElementById("area").options[document.getElementById("area").selectedIndex].value + ")" +
+            document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + " - " +
+            document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value;
+        document.getElementById("dashFormatButton").innerText = document.getElementById("area").options[document.getElementById("area").selectedIndex].value + "-" +
+            document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
+            document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value;
+        document.getElementById("plainFormatButton").innerText = document.getElementById("area").options[document.getElementById("area").selectedIndex].value +
+            document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value +
+            document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value;
+    } else if( document.getElementById("area").selectedIndex > 0 &&
+        document.getElementById("prefix").selectedIndex > 0 &&
+        document.getElementById("suffix").selectedIndex > 0){
+        setShowCopyButtons(true);
+    } else{
+        setShowCopyButtons(false);
+    }
 }
 
 function fetchWordFromMerriam(optionId, word, definitionListId) {
@@ -62,10 +87,10 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
                         break;
                     }
                 }
-                const definition = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0] + " (MERRIAMWEBSTER)";
-                document.getElementById(optionId).innerText = definition;
+                const wordDashDefinition = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0] + " (MERRIAMWEBSTER)";
+                document.getElementById(optionId).innerText = wordDashDefinition;
                 let li = document.createElement("li");
-                li.innerText = definition;
+                li.innerText = wordDashDefinition;
                 document.getElementById(definitionListId).appendChild(li);
             })
             .catch((message) => {
@@ -100,10 +125,11 @@ function fetchWordFromUrban(optionId, word, definitionListId) {
                 }
                 if(res.list[bestIndex] === undefined) throw new Error("NO URBAN DICTIONARY DEFINITION:" + JSON.stringify(res));
                 let bestDefinition = res.list[bestIndex].definition;
-                const definition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
-                document.getElementById(optionId).innerText = definition;
+                const wordDashDefinition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
+                document.getElementById(optionId).innerText = wordDashDefinition;
+                document.getElementById(optionId).value = word;
                 let li = document.createElement("li");
-                li.innerText = definition;
+                li.innerText = wordDashDefinition;
                 document.getElementById(definitionListId).appendChild(li);
             })
             .catch((message) => {

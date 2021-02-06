@@ -3,19 +3,33 @@ import React, {useState} from 'react';
 import NumberInput from './NumberInput';
 import CombinationsList from './CombinationsList';
 import NumberDisplay from './NumberDisplay';
+import CopyButton from './CopyButton';
 
 function PhoneWordsFrame() {
     const [phoneNumber, setPhoneNumber] = useState(Array(10).fill("   "));
     const [areaCodeWords, setAreaCodeWords] = useState(Array(Array(2)));
     const [prefixWords, setPrefixWords] = useState(Array(Array(2)));
     const [suffixWords, setSuffixWords] = useState(Array(Array(2)));
+    const [showCopyButtons, setShowCopyButtons] = useState(false);
     return (
         <>
             <div className='main'>
                 <NumberInput id='phonenumber' length='10'
                              action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
                 <NumberDisplay phoneNumber={phoneNumber}/>
-                <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords}/>
+                {showCopyButtons ?
+                    <>
+                        <CopyButton id="parenFormatButton" buttonText={"(" + document.getElementById("area").options[document.getElementById("area").selectedIndex].value + ")" +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + " - " +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                        <CopyButton id="dashFormatButton" buttonText={document.getElementById("area").options[document.getElementById("area").selectedIndex].value + "-" +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                        <CopyButton id="plainFormatButton" buttonText={document.getElementById("area").options[document.getElementById("area").selectedIndex].value +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                    </> : ""}
+                <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords} showCopyButtons={showCopyButtons} setShowCopyButtons={setShowCopyButtons} />
             </div>
         </>
     );
