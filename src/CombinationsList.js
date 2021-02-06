@@ -79,7 +79,13 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
 function fetchWordFromUrban(optionId, word, definitionListId) {
     if(word){
         //URBAN DICTIONARY
-        fetch('http://api.urbandictionary.com/v0/define?term=' + word, {mode: 'cors'})
+        fetch("https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=" + word, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-key": "1c2eed9801msh9a03da88e676433p16db88jsncfe81277ff23",
+                "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com"
+            }
+        })
             .then(res => res.json())
             .then (res => {
                 //find most thumbs up definition
