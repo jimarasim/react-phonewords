@@ -12,14 +12,12 @@ function PhoneWordsFrame (){
     return(
         <>
         <div className='main'>
-            <span>Enter 10 digit Phone Number:</span>
-            <br />
             <NumberInput id='phonenumber' length='10' action={(element) => handleKeyUp(element, setPhoneNumber,setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
             <br />
             {
                 phoneNumber.map(
                     value =>
-                        "{" + value + "}"
+                        "[" + value + "]"
                 )
             }
             <br />
