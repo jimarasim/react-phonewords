@@ -52,6 +52,7 @@ function fetchWord(optionId, word, definitionListId) {
         fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
             .then(res => res.json())
             .then(res => {
+                if(!res[0].hasOwnProperty('shortdef')) throw new Error("UNEXPECTED JSON:" + res);
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
                 let i = 0;
