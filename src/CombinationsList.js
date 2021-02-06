@@ -24,11 +24,11 @@ function CombinationsList({area, prefix, suffix}){
     if(areaCodeList.length > 1)
     {
         return (<>
-            <select id='area'>{areaCodeList}</select>
+            <select id='area'><option value="" disabled selected hidden>Choose Area Code...</option>{areaCodeList}</select>
             <br />
-            <select id='prefix'>{prefixList}</select>
+            <select id='prefix'><option value="" disabled selected hidden>Choose Prefix...</option>{prefixList}</select>
             <br />
-            <select id='suffix'>{suffixList}</select>
+            <select id='suffix'><option value="" disabled selected hidden>Choose Suffix...</option>{suffixList}</select>
             <hr />
             <h1><u>AREA</u></h1>
             <DefinitionList id="areaDefinitions" />
@@ -53,7 +53,7 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
         fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
             .then(res => res.json())
             .then(res => {
-                if (!res[0].hasOwnProperty('shortdef')) throw new Error("NODEFINITION" + res);
+                if (!res[0].hasOwnProperty('shortdef')) throw new Error("NO MERRIAM WEBSTER DEFINITION" + JSON.stringify(res));
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
                 let i = 0;
@@ -98,6 +98,7 @@ function fetchWordFromUrban(optionId, word, definitionListId) {
                         bestIndex = i;
                     }
                 }
+                if(res.list[bestIndex] === undefined) throw new Error("NO URBAN DICTIONARY DEFINITION:" + JSON.stringify(res));
                 let bestDefinition = res.list[bestIndex].definition;
                 const definition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
                 document.getElementById(optionId).innerText = definition;
@@ -105,7 +106,10 @@ function fetchWordFromUrban(optionId, word, definitionListId) {
                 li.innerText = definition;
                 document.getElementById(definitionListId).appendChild(li);
             })
-            .catch(console.warn);
+            .catch((message) => {
+                    console.warn(message);
+                }
+            );
     }
 }
 
