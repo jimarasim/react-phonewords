@@ -1,28 +1,22 @@
 import './index.css';
-// import React from 'react';
 import React, {useState} from 'react';
 import NumberInput from './NumberInput';
 import CombinationsList from './CombinationsList';
+import NumberDisplay from './NumberDisplay';
 
-function PhoneWordsFrame (){
+function PhoneWordsFrame() {
     const [phoneNumber, setPhoneNumber] = useState(Array(10).fill("   "));
     const [areaCodeWords, setAreaCodeWords] = useState(Array(Array(2)));
     const [prefixWords, setPrefixWords] = useState(Array(Array(2)));
     const [suffixWords, setSuffixWords] = useState(Array(Array(2)));
-    return(
+    return (
         <>
-        <div className='main'>
-            <NumberInput id='phonenumber' length='10' action={(element) => handleKeyUp(element, setPhoneNumber,setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
-            <br />
-            {
-                phoneNumber.map(
-                    value =>
-                        "[" + value + "]"
-                )
-            }
-            <br />
-            <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords}/>
-        </div>
+            <div className='main'>
+                <NumberInput id='phonenumber' length='10'
+                             action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
+                <NumberDisplay phoneNumber={phoneNumber}/>
+                <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords}/>
+            </div>
         </>
     );
 }
