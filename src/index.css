@@ -1,11 +1,5 @@
 body {
-  /*margin: 0;*/
-  /*font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
-  /*  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
-  /*  sans-serif;*/
-  /*-webkit-font-smoothing: antialiased;*/
-  /*-moz-osx-font-smoothing: grayscale;*/
-  /*font-size: small;*/
+
 }
 
 code {
@@ -19,19 +13,18 @@ div.main {
 }
 
 div.definitionList {
-  width:25%
+  width:100%
 }
 
 input {
   background-color: aquamarine;
   height:50px;
   font-size:30pt;
-  width: 25%;
+  width: 100%;
 }
 
 select {
-  width: 25%;
-  max-width: 100%;
+  width: 100%;
   font-size:30pt;
   text-overflow:ellipsis;
   /* So it doesn't overflow from it's parent */
@@ -49,10 +42,3 @@ option {
   border-bottom: 1px solid #DDD;
 }
 
-table {
-  width: 25%;
-}
-
-table, th, td {
-  border: 1px solid black;
-}
