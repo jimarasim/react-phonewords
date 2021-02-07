@@ -3,7 +3,7 @@
   "name": "Create React App Sample",
   "permissions" : [
     "clipboardRead",
-    "clipboardWrite",
+    "clipboardWrite"
   ],
   "icons": [
     {
