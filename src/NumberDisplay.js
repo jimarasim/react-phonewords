@@ -3,10 +3,12 @@ import './index.css';
 
 function NumberDisplay ({phoneNumber}) {
     return(
-        phoneNumber.map((value, index) => {
+        <span id="numberDisplay">
+        {phoneNumber.map((value, index) => {
                 return numberFormat(value, index);
             }
-        )
+        )}
+        </span>
     );
 }
 

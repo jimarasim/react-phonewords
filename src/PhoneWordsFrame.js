@@ -15,7 +15,7 @@ function PhoneWordsFrame() {
         <>
             <div className='main'>
                 <NumberInput id='phonenumber' length='10'
-                             action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
+                             action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons)}/>
                 <NumberDisplay phoneNumber={phoneNumber}/>
                 {showCopyButtons ?
                     <>
@@ -35,7 +35,7 @@ function PhoneWordsFrame() {
     );
 }
 
-function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords) {
+function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons) {
     const keyLetters = ["0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
     let newCodedPhoneNumberArray = Array(10).fill("");
     for (let i = 0; i < element.target.value.length; i++) {
@@ -50,6 +50,8 @@ function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, 
     let newSuffixWords = Array(Array(2));
     if (element.target.value.length === 10) {
         [newAreaCodeWords, newPrefixWords, newSuffixWords] = getWordCombinations(newCodedPhoneNumberArray);
+    } else{
+        setShowCopyButtons(false);
     }
     setPhoneNumber(newCodedPhoneNumberArray);
     setAreaCodeWords(newAreaCodeWords);
