@@ -9,26 +9,26 @@ function CombinationsList({area, prefix, suffix}){
     for(let i=0; i<area.length; i++){
         const areaid = "area" + i;
         areaCodeList.push(<option key={areaid} id={areaid}>{area[i][0]}</option>);
-        fetchWord(areaid, area[i][0], "areaDefinitions");
+        fetchWordFromMerriam(areaid, area[i][0], "areaDefinitions");
     }
     for(let i=0; i<prefix.length; i++){
         const prefixid = "prefix" + i;
         prefixList.push(<option key={prefixid} id={prefixid}>{prefix[i][0]}</option>);
-        fetchWord(prefixid, prefix[i][0], "prefixDefinitions");
+        fetchWordFromMerriam(prefixid, prefix[i][0], "prefixDefinitions");
     }
     for(let i=0; i<suffix.length; i++){
         const suffixid = "suffix" + i;
         suffixList.push(<option key={suffixid} id={suffixid}>{suffix[i][0]}</option>);
-        fetchWord(suffixid, suffix[i][0], "suffixDefinitions");
+        fetchWordFromMerriam(suffixid, suffix[i][0], "suffixDefinitions");
     }
     if(areaCodeList.length > 1)
     {
         return (<>
-            <select id='area'>{areaCodeList}</select>
+            <select id='area'><option value="" disabled selected hidden>Choose Area Code...</option>{areaCodeList}</select>
             <br />
-            <select id='prefix'>{prefixList}</select>
+            <select id='prefix'><option value="" disabled selected hidden>Choose Prefix...</option>{prefixList}</select>
             <br />
-            <select id='suffix'>{suffixList}</select>
+            <select id='suffix'><option value="" disabled selected hidden>Choose Suffix...</option>{suffixList}</select>
             <hr />
             <h1><u>AREA</u></h1>
             <DefinitionList id="areaDefinitions" />
@@ -46,50 +46,73 @@ function CombinationsList({area, prefix, suffix}){
 
 }
 
-function fetchWord(optionId, word, definitionListId) {
+function fetchWordFromMerriam(optionId, word, definitionListId) {
     if (word) {
         word = word.replace("1", "i").replace("0", "o");
+        //MERRIAM WEBSTER
         fetch('https://www.dictionaryapi.com/api/v3/references/collegiate/json/' + word + '?key=84b88140-44b3-4a35-bfbb-203d307ad99e')
             .then(res => res.json())
             .then(res => {
-                if(!res[0].hasOwnProperty('shortdef')) throw new Error("UNEXPECTED JSON:" + res);
+                if (!res[0].hasOwnProperty('shortdef')) throw new Error("NO MERRIAM WEBSTER DEFINITION" + JSON.stringify(res));
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
                 let i = 0;
-                for(i=0; i<numDefs;i++){
-                    if(res[i].shortdef[0]){
+                for (i = 0; i < numDefs; i++) {
+                    if (res[i].shortdef[0]) {
                         break;
                     }
-                };
-                document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                }
+                const definition = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0] + " (MERRIAMWEBSTER)";
+                document.getElementById(optionId).innerText = definition;
                 let li = document.createElement("li");
-                li.innerText = document.getElementById(optionId).innerText + " - " + res[i].shortdef[0];
+                li.innerText = definition;
                 document.getElementById(definitionListId).appendChild(li);
             })
-            .catch(console.warn);
-        // fetch('http://api.urbandictionary.com/v0/define?term=' + word, {mode: 'cors'})
-        //     .then(res => res.json())
-        //     .then (res => {
-        //         //find most thumbs up definition
-        //         const numDefs = Object.keys(res.list).length;
-        //         let bestThumbsUp = 0;
-        //         let bestIndex = 0;
-        //         for(let i=0; i<numDefs; i++){
-        //             if(res.list[i].thumbs_up > bestThumbsUp) {
-        //                 bestThumbsUp = res.list[i].thumbs_up;
-        //                 bestIndex = i;
-        //             }
-        //         }
-        //         let bestDefinition = res.list[bestIndex].definition;
-        //         document.getElementById(optionId).innerText = document.getElementById(optionId).innerText + " - " + bestDefinition;
-        //
-        //         let li = document.createElement("li");
-        //         li.innerText = document.getElementById(optionId).innerText + " - " + bestDefinition;
-        //         document.getElementById(definitionListId).appendChild(li);
-        //     })
-        //     .catch(console.warn);
+            .catch((message) => {
+                    console.warn(message);
+                    fetchWordFromUrban(optionId, word, definitionListId);
+                }
+            );
     }
 }
+
+function fetchWordFromUrban(optionId, word, definitionListId) {
+    if(word){
+        //URBAN DICTIONARY
+        fetch("https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=" + word, {
+            "method": "GET",
+            "headers": {
+                "x-rapidapi-key": "1c2eed9801msh9a03da88e676433p16db88jsncfe81277ff23",
+                "x-rapidapi-host": "mashape-community-urban-dictionary.p.rapidapi.com"
+            }
+        })
+            .then(res => res.json())
+            .then (res => {
+                //find most thumbs up definition
+                const numDefs = Object.keys(res.list).length;
+                let bestThumbsUp = 0;
+                let bestIndex = 0;
+                for(let i=0; i<numDefs; i++){
+                    if(res.list[i].thumbs_up > bestThumbsUp) {
+                        bestThumbsUp = res.list[i].thumbs_up;
+                        bestIndex = i;
+                    }
+                }
+                if(res.list[bestIndex] === undefined) throw new Error("NO URBAN DICTIONARY DEFINITION:" + JSON.stringify(res));
+                let bestDefinition = res.list[bestIndex].definition;
+                const definition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
+                document.getElementById(optionId).innerText = definition;
+                let li = document.createElement("li");
+                li.innerText = definition;
+                document.getElementById(definitionListId).appendChild(li);
+            })
+            .catch((message) => {
+                    console.warn(message);
+                }
+            );
+    }
+}
+
 
 
 export default CombinationsList;
