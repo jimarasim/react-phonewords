@@ -1,33 +1,44 @@
 import './index.css';
-// import React from 'react';
 import React, {useState} from 'react';
 import NumberInput from './NumberInput';
 import CombinationsList from './CombinationsList';
+import NumberDisplay from './NumberDisplay';
+import CopyButton from './CopyButton';
 
-function PhoneWordsFrame (){
+function PhoneWordsFrame() {
     const [phoneNumber, setPhoneNumber] = useState(Array(10).fill("   "));
     const [areaCodeWords, setAreaCodeWords] = useState(Array(Array(2)));
     const [prefixWords, setPrefixWords] = useState(Array(Array(2)));
     const [suffixWords, setSuffixWords] = useState(Array(Array(2)));
-    return(
+    const [showCopyButtons, setShowCopyButtons] = useState(false);
+    return (
         <>
-        <div className='main'>
-            <NumberInput id='phonenumber' length='10' action={(element) => handleKeyUp(element, setPhoneNumber,setAreaCodeWords, setPrefixWords, setSuffixWords)}/>
-            <br />
-            {
-                phoneNumber.map(
-                    value =>
-                        "[" + value + "]"
-                )
-            }
-            <br />
-            <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords}/>
-        </div>
+            <div className='main'>
+                <NumberInput id='phonenumber' length='10'
+                             action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons)}/>
+                <NumberDisplay phoneNumber={phoneNumber}/>
+                {showCopyButtons ?
+                    <>
+                        <br />
+                        <CopyButton id="parenFormatButton" buttonText={"(" + document.getElementById("area").options[document.getElementById("area").selectedIndex].value + ")" +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                        <br />
+                        <CopyButton id="dashFormatButton" buttonText={document.getElementById("area").options[document.getElementById("area").selectedIndex].value + "-" +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value + "-" +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                        <br />
+                        <CopyButton id="plainFormatButton" buttonText={document.getElementById("area").options[document.getElementById("area").selectedIndex].value +
+                        document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value +
+                        document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
+                    </> : ""}
+                <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords} showCopyButtons={showCopyButtons} setShowCopyButtons={setShowCopyButtons} />
+            </div>
         </>
     );
 }
 
-function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords) {
+function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons) {
     const keyLetters = ["0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
     let newCodedPhoneNumberArray = Array(10).fill("");
     for (let i = 0; i < element.target.value.length; i++) {
@@ -42,6 +53,8 @@ function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, 
     let newSuffixWords = Array(Array(2));
     if (element.target.value.length === 10) {
         [newAreaCodeWords, newPrefixWords, newSuffixWords] = getWordCombinations(newCodedPhoneNumberArray);
+    } else{
+        setShowCopyButtons(false);
     }
     setPhoneNumber(newCodedPhoneNumberArray);
     setAreaCodeWords(newAreaCodeWords);
