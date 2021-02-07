@@ -42,8 +42,13 @@ option {
   border-bottom: 1px solid #DDD;
 }
 
-#numberDisplay, .copyButton {
+#numberDisplay {
+  font-size:30pt;
+}
+
+.copyButton {
   font-size:25pt;
+  width:10%;
 }
 
 
