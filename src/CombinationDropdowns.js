@@ -2,7 +2,7 @@ import './index.css';
 import * as React from "react";
 import DefinitionList from './DefinitionList';
 
-function CombinationDropdowns({areaCodeWords, prefixWordsx, suffixWords, showCopyButtons, setShowCopyButtons}){
+function CombinationDropdowns({areaCodeWords, prefixWords, suffixWords, showCopyButtons, setShowCopyButtons}){
     let areaCodeList = Array(0);
     let prefixList = Array(0);
     let suffixList = Array(0);
@@ -12,11 +12,11 @@ function CombinationDropdowns({areaCodeWords, prefixWordsx, suffixWords, showCop
         areaCodeList.push(<option key={areaid} id={areaid} value={areaOptionValue}>{areaOptionValue}</option>);
         fetchWordFromMerriam(areaid, areaCodeWords[i][0], "areaDefinitions");
     }
-    for(let i=0; i<prefixWordsx.length; i++){
+    for(let i=0; i<prefixWords.length; i++){
         const prefixid = "prefix" + i;
-        const prefixOptionValue = prefixWordsx[i][0];
+        const prefixOptionValue = prefixWords[i][0];
         prefixList.push(<option key={prefixid} id={prefixid} value={prefixOptionValue}>{prefixOptionValue}</option>);
-        fetchWordFromMerriam(prefixid, prefixWordsx[i][0], "prefixDefinitions");
+        fetchWordFromMerriam(prefixid, prefixWords[i][0], "prefixDefinitions");
     }
     for(let i=0; i<suffixWords.length; i++){
         const suffixid = "suffix" + i;
