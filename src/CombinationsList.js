@@ -102,6 +102,7 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
 }
 
 function fetchWordFromUrban(optionId, word, definitionListId) {
+    word = word.replace("1", "i").replace("0", "o");
     if(word){
         //URBAN DICTIONARY
         fetch("https://mashape-community-urban-dictionary.p.rapidapi.com/define?term=" + word, {
@@ -127,7 +128,6 @@ function fetchWordFromUrban(optionId, word, definitionListId) {
                 let bestDefinition = res.list[bestIndex].definition;
                 const wordDashDefinition = document.getElementById(optionId).innerText + " - " + bestDefinition + " (URBANDICTIONARY)";
                 document.getElementById(optionId).innerText = wordDashDefinition;
-                document.getElementById(optionId).value = word;
                 let li = document.createElement("li");
                 li.innerText = wordDashDefinition;
                 document.getElementById(definitionListId).appendChild(li);
