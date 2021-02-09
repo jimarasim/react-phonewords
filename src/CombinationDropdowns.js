@@ -2,27 +2,27 @@ import './index.css';
 import * as React from "react";
 import DefinitionList from './DefinitionList';
 
-function CombinationsList({area, prefix, suffix, showCopyButtons, setShowCopyButtons}){
+function CombinationDropdowns({areaCodeWords, prefixWords, suffixWords, showCopyButtons, setShowCopyButtons}){
     let areaCodeList = Array(0);
     let prefixList = Array(0);
     let suffixList = Array(0);
-    for(let i=0; i<area.length; i++){
+    for(let i=0; i<areaCodeWords.length; i++){
         const areaid = "area" + i;
-        const areaOptionValue = area[i][0];
+        const areaOptionValue = areaCodeWords[i][0];
         areaCodeList.push(<option key={areaid} id={areaid} value={areaOptionValue}>{areaOptionValue}</option>);
-        fetchWordFromMerriam(areaid, area[i][0], "areaDefinitions");
+        fetchWordFromMerriam(areaid, areaCodeWords[i][0], "areaDefinitions");
     }
-    for(let i=0; i<prefix.length; i++){
+    for(let i=0; i<prefixWords.length; i++){
         const prefixid = "prefix" + i;
-        const prefixOptionValue = prefix[i][0];
+        const prefixOptionValue = prefixWords[i][0];
         prefixList.push(<option key={prefixid} id={prefixid} value={prefixOptionValue}>{prefixOptionValue}</option>);
-        fetchWordFromMerriam(prefixid, prefix[i][0], "prefixDefinitions");
+        fetchWordFromMerriam(prefixid, prefixWords[i][0], "prefixDefinitions");
     }
-    for(let i=0; i<suffix.length; i++){
+    for(let i=0; i<suffixWords.length; i++){
         const suffixid = "suffix" + i;
-        const suffixOptionValue = suffix[i][0];
+        const suffixOptionValue = suffixWords[i][0];
         suffixList.push(<option key={suffixid} id={suffixid} value={suffixOptionValue}>{suffixOptionValue}</option>);
-        fetchWordFromMerriam(suffixid, suffix[i][0], "suffixDefinitions");
+        fetchWordFromMerriam(suffixid, suffixWords[i][0], "suffixDefinitions");
     }
     if(areaCodeList.length > 1)
     {
@@ -81,8 +81,8 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
                 if (!res[0].hasOwnProperty('shortdef')) throw new Error("NO MERRIAM WEBSTER DEFINITION" + JSON.stringify(res));
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
-                let i = 0;
-                for (i = 0; i < numDefs; i++) {
+                let i;
+                for (let i = 0; i < numDefs; i++) {
                     if (res[i].shortdef[0]) {
                         break;
                     }
@@ -141,4 +141,4 @@ function fetchWordFromUrban(optionId, word, definitionListId) {
 
 
 
-export default CombinationsList;
+export default CombinationDropdowns;

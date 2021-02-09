@@ -1,7 +1,7 @@
 import './index.css';
 import React, {useState} from 'react';
 import NumberInput from './NumberInput';
-import CombinationsList from './CombinationsList';
+import CombinationDropdowns from './CombinationDropdowns';
 import NumberDisplay from './NumberDisplay';
 import CopyButton from './CopyButton';
 
@@ -15,7 +15,7 @@ function PhoneWordsFrame() {
         <>
             <div className='main'>
                 <NumberInput id='phonenumber' length='10'
-                             action={(element) => handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons)}/>
+                             action={(element) => handleNumberInputChange(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons)}/>
                 <NumberDisplay phoneNumber={phoneNumber}/>
                 {showCopyButtons ?
                     <>
@@ -32,13 +32,13 @@ function PhoneWordsFrame() {
                         document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value +
                         document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
                     </> : ""}
-                <CombinationsList area={areaCodeWords} prefix={prefixWords} suffix={suffixWords} showCopyButtons={showCopyButtons} setShowCopyButtons={setShowCopyButtons} />
+                <CombinationDropdowns areaCodeWords={areaCodeWords} prefixWords={prefixWords} suffixWords={suffixWords} showCopyButtons={showCopyButtons} setShowCopyButtons={setShowCopyButtons} />
             </div>
         </>
     );
 }
 
-function handleKeyUp(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons) {
+function handleNumberInputChange(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons) {
     const keyLetters = ["0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
     let newCodedPhoneNumberArray = Array(10).fill("");
     for (let i = 0; i < element.target.value.length; i++) {
