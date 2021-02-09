@@ -24,29 +24,22 @@ function CombinationDropdowns({areaCodeWords, prefixWords, suffixWords, showCopy
         suffixList.push(<option key={suffixid} id={suffixid} value={suffixOptionValue}>{suffixOptionValue}</option>);
         fetchWordFromMerriam(suffixid, suffixWords[i][0], "suffixDefinitions");
     }
-    if(areaCodeList.length > 1)
-    {
-        return (<>
-            <select id='area' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Area Code...</option>{areaCodeList}</select>
-            <br />
-            <select id='prefix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Prefix...</option>{prefixList}</select>
-            <br />
-            <select id='suffix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Suffix...</option>{suffixList}</select>
-            <hr />
-            <h1><u>AREA</u></h1>
-            <DefinitionList id="areaDefinitions" />
-            <hr />
-            <h1><u>PREFIX</u></h1>
-            <DefinitionList id="prefixDefinitions" />
-            <hr />
-            <h1><u>SUFFIX</u></h1>
-            <DefinitionList id="suffixDefinitions" />
-        </>)
-    }
-    else {
-        return(<></>);
-    }
-
+    return (<>
+        <select id='area' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Area Code...</option>{areaCodeList}</select>
+        <br />
+        <select id='prefix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Prefix...</option>{prefixList}</select>
+        <br />
+        <select id='suffix' defaultValue={'DEFAULT'} onChange={() => setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons)}><option value="DEFAULT">Choose Suffix...</option>{suffixList}</select>
+        <hr />
+        <h1><u>AREA</u></h1>
+        <DefinitionList id="areaDefinitions" />
+        <hr />
+        <h1><u>PREFIX</u></h1>
+        <DefinitionList id="prefixDefinitions" />
+        <hr />
+        <h1><u>SUFFIX</u></h1>
+        <DefinitionList id="suffixDefinitions" />
+    </>)
 }
 
 function setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons){
