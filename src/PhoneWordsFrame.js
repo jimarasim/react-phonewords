@@ -1,16 +1,29 @@
 import './index.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import NumberInput from './NumberInput';
 import CombinationDropdowns from './CombinationDropdowns';
 import NumberDisplay from './NumberDisplay';
 import CopyButton from './CopyButton';
 
 function PhoneWordsFrame() {
-    const [phoneNumber, setPhoneNumber] = useState(Array(10).fill("   "));
+    const [phoneNumber, setPhoneNumber] = useState(Array(10).fill(""));
     const [areaCodeWords, setAreaCodeWords] = useState(Array(Array(2)));
     const [prefixWords, setPrefixWords] = useState(Array(Array(2)));
     const [suffixWords, setSuffixWords] = useState(Array(Array(2)));
     const [showCopyButtons, setShowCopyButtons] = useState(false);
+    useEffect(() => {
+        let newAreaCodeWords = Array(Array(2));
+        let newPrefixWords = Array(Array(2));
+        let newSuffixWords = Array(Array(2));
+        if (phoneNumber[9]) {
+            [newAreaCodeWords, newPrefixWords, newSuffixWords] = getWordCombinations(phoneNumber);
+            setAreaCodeWords(newAreaCodeWords);
+            setPrefixWords(newPrefixWords);
+            setSuffixWords(newSuffixWords);
+        } else{
+            setShowCopyButtons(false);
+        }
+    }, [phoneNumber]);
     return (
         <>
             <div className='main'>
@@ -32,13 +45,17 @@ function PhoneWordsFrame() {
                         document.getElementById("prefix").options[document.getElementById("prefix").selectedIndex].value +
                         document.getElementById("suffix").options[document.getElementById("suffix").selectedIndex].value} />
                     </> : ""}
-                <CombinationDropdowns areaCodeWords={areaCodeWords} prefixWords={prefixWords} suffixWords={suffixWords} showCopyButtons={showCopyButtons} setShowCopyButtons={setShowCopyButtons} />
+                {phoneNumber[9] ?
+                    <CombinationDropdowns areaCodeWords={areaCodeWords} prefixWords={prefixWords}
+                                          suffixWords={suffixWords} showCopyButtons={showCopyButtons}
+                                          setShowCopyButtons={setShowCopyButtons}/> : ""
+                }
             </div>
         </>
     );
 }
 
-function handleNumberInputChange(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons) {
+function handleNumberInputChange(element, setPhoneNumber) {
     const keyLetters = ["0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"];
     let newCodedPhoneNumberArray = Array(10).fill("");
     for (let i = 0; i < element.target.value.length; i++) {
@@ -48,18 +65,7 @@ function handleNumberInputChange(element, setPhoneNumber, setAreaCodeWords, setP
             newCodedPhoneNumberArray[i] = element.target.value[i];
         }
     }
-    let newAreaCodeWords = Array(Array(2));
-    let newPrefixWords = Array(Array(2));
-    let newSuffixWords = Array(Array(2));
-    if (element.target.value.length === 10) {
-        [newAreaCodeWords, newPrefixWords, newSuffixWords] = getWordCombinations(newCodedPhoneNumberArray);
-    } else{
-        setShowCopyButtons(false);
-    }
     setPhoneNumber(newCodedPhoneNumberArray);
-    setAreaCodeWords(newAreaCodeWords);
-    setPrefixWords(newPrefixWords);
-    setSuffixWords(newSuffixWords);
 }
 
 function getWordCombinations(newCodedPhoneNumberArray) {
