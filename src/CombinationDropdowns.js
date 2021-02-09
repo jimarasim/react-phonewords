@@ -81,8 +81,8 @@ function fetchWordFromMerriam(optionId, word, definitionListId) {
                 if (!res[0].hasOwnProperty('shortdef')) throw new Error("NO MERRIAM WEBSTER DEFINITION" + JSON.stringify(res));
                 //find the first non-undefined definition
                 const numDefs = Object.keys(res).length;
-                let i = 0;
-                for (i = 0; i < numDefs; i++) {
+                let i;
+                for (let i = 0; i < numDefs; i++) {
                     if (res[i].shortdef[0]) {
                         break;
                     }
