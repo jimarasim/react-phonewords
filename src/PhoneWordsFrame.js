@@ -7,14 +7,14 @@ import CopyButton from './CopyButton';
 
 function PhoneWordsFrame() {
     const [phoneNumber, setPhoneNumber] = useState(Array(10).fill(""));
-    const [areaCodeWords, setAreaCodeWords] = useState(Array(Array(2)));
-    const [prefixWords, setPrefixWords] = useState(Array(Array(2)));
-    const [suffixWords, setSuffixWords] = useState(Array(Array(2)));
+    const [areaCodeWords, setAreaCodeWords] = useState(Array([]));
+    const [prefixWords, setPrefixWords] = useState(Array([]));
+    const [suffixWords, setSuffixWords] = useState(Array([]));
     const [showCopyButtons, setShowCopyButtons] = useState(false);
     useEffect(() => {
-        let newAreaCodeWords = Array(Array(2));
-        let newPrefixWords = Array(Array(2));
-        let newSuffixWords = Array(Array(2));
+        let newAreaCodeWords = Array([]);
+        let newPrefixWords = Array([]);
+        let newSuffixWords = Array([]);
         if (phoneNumber[9]) {
             [newAreaCodeWords, newPrefixWords, newSuffixWords] = getWordCombinations(phoneNumber);
             setAreaCodeWords(newAreaCodeWords);
@@ -28,7 +28,7 @@ function PhoneWordsFrame() {
         <>
             <div className='main'>
                 <NumberInput id='phonenumber' length='10'
-                             action={(element) => handleNumberInputChange(element, setPhoneNumber, setAreaCodeWords, setPrefixWords, setSuffixWords, setShowCopyButtons)}/>
+                             action={(element) => handleNumberInputChange(element, setPhoneNumber)}/>
                 <NumberDisplay phoneNumber={phoneNumber}/>
                 {showCopyButtons ?
                     <>
@@ -69,21 +69,21 @@ function handleNumberInputChange(element, setPhoneNumber) {
 }
 
 function getWordCombinations(newCodedPhoneNumberArray) {
-    let newAreaCodeWords = Array(Array(2));
-    let newPrefixWords = Array(Array(2));
-    let newSuffixWords = Array(Array(2));
+    let newAreaCodeWords = Array([]);
+    let newPrefixWords = Array([]);
+    let newSuffixWords = Array([]);
     //AREA
     for (let i = 0; i < newCodedPhoneNumberArray[0].length; i++) {
         for (let j = 0; j < newCodedPhoneNumberArray[1].length; j++) {
             for (let k = 0; k < newCodedPhoneNumberArray[2].length; k++) {
-                newAreaCodeWords.push([newCodedPhoneNumberArray[0][i] + newCodedPhoneNumberArray[1][j] + newCodedPhoneNumberArray[2][k], ""]);
+                newAreaCodeWords.push([newCodedPhoneNumberArray[0][i] + newCodedPhoneNumberArray[1][j] + newCodedPhoneNumberArray[2][k]]);
             }
         }
     }
     for (let i = 0; i < newCodedPhoneNumberArray[3].length; i++) {
         for (let j = 0; j < newCodedPhoneNumberArray[4].length; j++) {
             for (let k = 0; k < newCodedPhoneNumberArray[5].length; k++) {
-                newPrefixWords.push([newCodedPhoneNumberArray[3][i] + newCodedPhoneNumberArray[4][j] + newCodedPhoneNumberArray[5][k], ""]);
+                newPrefixWords.push([newCodedPhoneNumberArray[3][i] + newCodedPhoneNumberArray[4][j] + newCodedPhoneNumberArray[5][k]]);
             }
         }
     }
@@ -91,7 +91,7 @@ function getWordCombinations(newCodedPhoneNumberArray) {
         for (let j = 0; j < newCodedPhoneNumberArray[7].length; j++) {
             for (let k = 0; k < newCodedPhoneNumberArray[8].length; k++) {
                 for (let l = 0; l < newCodedPhoneNumberArray[9].length; l++) {
-                    newSuffixWords.push([newCodedPhoneNumberArray[6][i] + newCodedPhoneNumberArray[7][j] + newCodedPhoneNumberArray[8][k] + newCodedPhoneNumberArray[9][l], ""]);
+                    newSuffixWords.push([newCodedPhoneNumberArray[6][i] + newCodedPhoneNumberArray[7][j] + newCodedPhoneNumberArray[8][k] + newCodedPhoneNumberArray[9][l]]);
                 }
             }
         }
