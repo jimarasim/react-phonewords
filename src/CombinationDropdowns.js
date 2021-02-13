@@ -42,6 +42,8 @@ function CombinationDropdowns({areaCodeWords, prefixWords, suffixWords, showCopy
     </>)
 }
 
+
+
 function setCorrectCopyButtonState(showCopyButtons, setShowCopyButtons){
     if( document.getElementById("area").selectedIndex > 0 &&
         document.getElementById("prefix").selectedIndex > 0 &&
