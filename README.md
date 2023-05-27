@@ -31,7 +31,7 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 FOR DREAMHOST: PUT THIS IN TOP LEVEL OF package.json
-"homepage": "http://seattlerules.com/phonewords"
+"homepage": "http://jaemzware.com/phonewords"
 before running 
 npm run build
 then upload contents
